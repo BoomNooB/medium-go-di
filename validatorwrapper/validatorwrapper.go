@@ -77,7 +77,6 @@ func (v *validatorWrapper) logValidationErrors(vErr validator.ValidationErrors) 
 		}
 	}
 
-	// Get struct name
 	timestamp := time.Now().Format(time.RFC3339)
 
 	// Collect all rows
