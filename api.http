@@ -1,4 +1,8 @@
-### Test 1: Valid Request - Should return 200 OK
+### ============================================
+### API 1: Favorite Number Validation
+### ============================================
+
+### Test 1.1: Valid Request - Should return 200 OK
 POST http://localhost:1323/api/v1/favorite
 Content-Type: application/json
 
@@ -7,34 +11,16 @@ Content-Type: application/json
   "favNum": 42
 }
 
-### Test 2: Valid Request with Different Values
+### Test 1.2: Invalid UUID - Should return 400 with validation error
 POST http://localhost:1323/api/v1/favorite
 Content-Type: application/json
 
 {
-  "userId": "f003d47c-e657-485b-a01e-065d18f87295",
-  "favNum": 7
-}
-
-### Test 3: Invalid JSON Syntax - Should return 400 with "json not valid"
-POST http://localhost:1323/api/v1/favorite
-Content-Type: application/json
-
-{
-  "userId": "7f4a4135-183a-4083-ad2a-d0c82126b642",
-  "favNum": 42,
-}
-
-### Test 4: Malformed JSON - Should return 400 with "json not valid"
-POST http://localhost:1323/api/v1/favorite
-Content-Type: application/json
-
-{
-  "userId": "08088728-50c2-417d-a010-5769965a885c"
+  "userId": "not-a-valid-uuid",
   "favNum": 42
 }
 
-### Test 5: Missing userId Field - Should return 400 with "request not valid"
+### Test 1.3: Missing userId - Should return 400 with validation error
 POST http://localhost:1323/api/v1/favorite
 Content-Type: application/json
 
@@ -42,39 +28,7 @@ Content-Type: application/json
   "favNum": 99
 }
 
-### Test 6: Missing favNum Field - Should return 400 with "request not valid"
-POST http://localhost:1323/api/v1/favorite
-Content-Type: application/json
-
-{
-  "userId": "user456"
-}
-
-### Test 7: Empty userId - Should return 400 with "request not valid"
-POST http://localhost:1323/api/v1/favorite
-Content-Type: application/json
-
-{
-  "userId": "",
-  "favNum": 10
-}
-
-### Test 8: Empty Request Body - Should return 400 with "json not valid"
-POST http://localhost:1323/api/v1/favorite
-Content-Type: application/json
-
-{}
-
-### Test 9: Null userId - Should return 400
-POST http://localhost:1323/api/v1/favorite
-Content-Type: application/json
-
-{
-  "userId": null,
-  "favNum": 5
-}
-
-### Test 10: Zero favNum - Should work (0 is valid int)
+### Test 1.4: Zero favNum - Should return 400 (must be > 0)
 POST http://localhost:1323/api/v1/favorite
 Content-Type: application/json
 
@@ -83,7 +37,7 @@ Content-Type: application/json
   "favNum": 0
 }
 
-### Test 11: Negative favNum - Should work (negative is valid int)
+### Test 1.5: Negative favNum - Should return 400 (must be > 0)
 POST http://localhost:1323/api/v1/favorite
 Content-Type: application/json
 
@@ -92,19 +46,313 @@ Content-Type: application/json
   "favNum": -5
 }
 
-### Test 12: Wrong Content Type - Should return 400
-POST http://localhost:1323/api/v1/favorite
-Content-Type: text/plain
-
-userId=test&favNum=123
-
-### Test 13: Extra Fields (should be ignored)
+### Test 1.6: Invalid JSON Syntax - Should return 400 with "json not valid"
 POST http://localhost:1323/api/v1/favorite
 Content-Type: application/json
 
 {
+  "userId": "7f4a4135-183a-4083-ad2a-d0c82126b642",
+  "favNum": 42,
+}
+
+### ============================================
+### API 2: Pet Name Validation
+### ============================================
+
+### Test 2.1: Valid Pet Name - Should return 200 OK
+POST http://localhost:1323/api/v1/pet-name
+Content-Type: application/json
+
+{
+  "petName": "Fluffy",
+  "ownerId": "f003d47c-e657-485b-a01e-065d18f87295"
+}
+
+### Test 2.2: Valid Pet Name with longer name
+POST http://localhost:1323/api/v1/pet-name
+Content-Type: application/json
+
+{
+  "petName": "Mr. Whiskers the Third",
+  "ownerId": "08088728-50c2-417d-a010-5769965a885c"
+}
+
+### Test 2.3: Pet Name too short (< 2 chars) - Should return 400
+POST http://localhost:1323/api/v1/pet-name
+Content-Type: application/json
+
+{
+  "petName": "A",
+  "ownerId": "f003d47c-e657-485b-a01e-065d18f87295"
+}
+
+### Test 2.4: Pet Name too long (> 50 chars) - Should return 400
+POST http://localhost:1323/api/v1/pet-name
+Content-Type: application/json
+
+{
+  "petName": "This is a very long pet name that exceeds the maximum allowed length of fifty characters",
+  "ownerId": "f003d47c-e657-485b-a01e-065d18f87295"
+}
+
+### Test 2.5: Missing petName - Should return 400
+POST http://localhost:1323/api/v1/pet-name
+Content-Type: application/json
+
+{
+  "ownerId": "f003d47c-e657-485b-a01e-065d18f87295"
+}
+
+### Test 2.6: Invalid ownerId UUID - Should return 400
+POST http://localhost:1323/api/v1/pet-name
+Content-Type: application/json
+
+{
+  "petName": "Buddy",
+  "ownerId": "invalid-uuid"
+}
+
+### Test 2.7: Empty petName - Should return 400
+POST http://localhost:1323/api/v1/pet-name
+Content-Type: application/json
+
+{
+  "petName": "",
+  "ownerId": "f003d47c-e657-485b-a01e-065d18f87295"
+}
+
+### Test 2.8: Invalid JSON - Should return 400 with "json not valid"
+POST http://localhost:1323/api/v1/pet-name
+Content-Type: application/json
+
+{
+  "petName": "Fluffy"
+  "ownerId": "f003d47c-e657-485b-a01e-065d18f87295"
+}
+
+### ============================================
+### API 3: Thai Citizen ID Validation
+### ============================================
+
+### Test 3.1: Valid Thai Citizen ID - Should return 200 OK
+POST http://localhost:1323/api/v1/thai-cid
+Content-Type: application/json
+
+{
+  "citizenId": "1234567890123",
+  "fullName": "สมชาย ใจดี"
+}
+
+### Test 3.2: Valid Thai Citizen ID with English name
+POST http://localhost:1323/api/v1/thai-cid
+Content-Type: application/json
+
+{
+  "citizenId": "9876543210987",
+  "fullName": "John Doe"
+}
+
+### Test 3.3: Citizen ID too short (< 13 chars) - Should return 400
+POST http://localhost:1323/api/v1/thai-cid
+Content-Type: application/json
+
+{
+  "citizenId": "12345678901",
+  "fullName": "สมชาย ใจดี"
+}
+
+### Test 3.4: Citizen ID too long (> 13 chars) - Should return 400
+POST http://localhost:1323/api/v1/thai-cid
+Content-Type: application/json
+
+{
+  "citizenId": "12345678901234",
+  "fullName": "สมชาย ใจดี"
+}
+
+### Test 3.5: Non-numeric Citizen ID - Should return 400
+POST http://localhost:1323/api/v1/thai-cid
+Content-Type: application/json
+
+{
+  "citizenId": "123ABC7890123",
+  "fullName": "สมชาย ใจดี"
+}
+
+### Test 3.6: Missing citizenId - Should return 400
+POST http://localhost:1323/api/v1/thai-cid
+Content-Type: application/json
+
+{
+  "fullName": "สมชาย ใจดี"
+}
+
+### Test 3.7: Full Name too short (< 3 chars) - Should return 400
+POST http://localhost:1323/api/v1/thai-cid
+Content-Type: application/json
+
+{
+  "citizenId": "1234567890123",
+  "fullName": "AB"
+}
+
+### Test 3.8: Missing fullName - Should return 400
+POST http://localhost:1323/api/v1/thai-cid
+Content-Type: application/json
+
+{
+  "citizenId": "1234567890123"
+}
+
+### Test 3.9: Invalid JSON - Should return 400 with "json not valid"
+POST http://localhost:1323/api/v1/thai-cid
+Content-Type: application/json
+
+{
+  "citizenId": "1234567890123",
+  "fullName": "สมชาย ใจดี",
+}
+
+### ============================================
+### API 4: Guess The Cat Name
+### ============================================
+
+### Test 4.1: Valid Guess - Should return 200 OK
+POST http://localhost:1323/api/v1/guess-cat
+Content-Type: application/json
+
+{
+  "guessName": "Mittens",
   "userId": "af519cc4-56c4-4da9-bb2d-37fd215b17fe",
-  "favNum": 100,
-  "extraField": "should be ignored",
-  "anotherExtra": true
+  "attempts": 1
+}
+
+### Test 4.2: Valid Guess with max attempts
+POST http://localhost:1323/api/v1/guess-cat
+Content-Type: application/json
+
+{
+  "guessName": "Whiskers",
+  "userId": "a8836583-59ee-4bf8-8fa7-9013af8459ae",
+  "attempts": 3
+}
+
+### Test 4.3: Empty guessName - Should return 400
+POST http://localhost:1323/api/v1/guess-cat
+Content-Type: application/json
+
+{
+  "guessName": "",
+  "userId": "af519cc4-56c4-4da9-bb2d-37fd215b17fe",
+  "attempts": 1
+}
+
+### Test 4.4: Guess name too long (> 30 chars) - Should return 400
+POST http://localhost:1323/api/v1/guess-cat
+Content-Type: application/json
+
+{
+  "guessName": "This is a very long cat name that exceeds thirty characters",
+  "userId": "af519cc4-56c4-4da9-bb2d-37fd215b17fe",
+  "attempts": 1
+}
+
+### Test 4.5: Invalid userId - Should return 400
+POST http://localhost:1323/api/v1/guess-cat
+Content-Type: application/json
+
+{
+  "guessName": "Fluffy",
+  "userId": "not-a-uuid",
+  "attempts": 1
+}
+
+### Test 4.6: Attempts = 0 (must be >= 1) - Should return 400
+POST http://localhost:1323/api/v1/guess-cat
+Content-Type: application/json
+
+{
+  "guessName": "Fluffy",
+  "userId": "af519cc4-56c4-4da9-bb2d-37fd215b17fe",
+  "attempts": 0
+}
+
+### Test 4.7: Attempts > 3 (must be <= 3) - Should return 400
+POST http://localhost:1323/api/v1/guess-cat
+Content-Type: application/json
+
+{
+  "guessName": "Fluffy",
+  "userId": "af519cc4-56c4-4da9-bb2d-37fd215b17fe",
+  "attempts": 4
+}
+
+### Test 4.8: Missing guessName - Should return 400
+POST http://localhost:1323/api/v1/guess-cat
+Content-Type: application/json
+
+{
+  "userId": "af519cc4-56c4-4da9-bb2d-37fd215b17fe",
+  "attempts": 1
+}
+
+### Test 4.9: Missing userId - Should return 400
+POST http://localhost:1323/api/v1/guess-cat
+Content-Type: application/json
+
+{
+  "guessName": "Fluffy",
+  "attempts": 1
+}
+
+### Test 4.10: Missing attempts - Should return 400
+POST http://localhost:1323/api/v1/guess-cat
+Content-Type: application/json
+
+{
+  "guessName": "Fluffy",
+  "userId": "af519cc4-56c4-4da9-bb2d-37fd215b17fe"
+}
+
+### Test 4.11: Negative attempts - Should return 400
+POST http://localhost:1323/api/v1/guess-cat
+Content-Type: application/json
+
+{
+  "guessName": "Fluffy",
+  "userId": "af519cc4-56c4-4da9-bb2d-37fd215b17fe",
+  "attempts": -1
+}
+
+### Test 4.12: Invalid JSON - Should return 400 with "json not valid"
+POST http://localhost:1323/api/v1/guess-cat
+Content-Type: application/json
+
+{
+  "guessName": "Fluffy",
+  "userId": "af519cc4-56c4-4da9-bb2d-37fd215b17fe",
+  "attempts": 1,
+}
+
+### ============================================
+### Additional Edge Cases
+### ============================================
+
+### Test 5.1: Wrong HTTP Method - Should return 405
+GET http://localhost:1323/api/v1/favorite
+
+### Test 5.2: Non-existent Endpoint - Should return 404
+POST http://localhost:1323/api/v1/non-existent
+Content-Type: application/json
+
+{
+  "test": "data"
+}
+
+### Test 5.3: Missing Content-Type Header
+POST http://localhost:1323/api/v1/favorite
+
+{
+  "userId": "a8836583-59ee-4bf8-8fa7-9013af8459ae",
+  "favNum": 42
 }
