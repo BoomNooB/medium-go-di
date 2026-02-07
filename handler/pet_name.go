@@ -24,7 +24,7 @@ func NewPetNameHandler(validator *validator.Validate) *PetNameHandler {
 	}
 }
 
-func (h *PetNameHandler) ValidatePetName(c echo.Context) error {
+func (ph *PetNameHandler) ValidatePetName(c echo.Context) error {
 	ctx := c.Request().Context()
 	req := PetNameRequest{}
 	err := c.Bind(&req)
@@ -35,7 +35,7 @@ func (h *PetNameHandler) ValidatePetName(c echo.Context) error {
 		)
 	}
 
-	err = h.v.StructCtx(ctx, &req)
+	err = ph.v.StructCtx(ctx, &req)
 	if err != nil {
 		// check if it's a validation error or not
 		if errors.As(err, &validator.ValidationErrors{}) {

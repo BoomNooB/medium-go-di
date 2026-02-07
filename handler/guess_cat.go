@@ -25,7 +25,7 @@ func NewGuessCatNameHandler(validator *validator.Validate) *GuessCatNameHandler 
 	}
 }
 
-func (h *GuessCatNameHandler) GuessTheCatName(c echo.Context) error {
+func (gh *GuessCatNameHandler) GuessTheCatName(c echo.Context) error {
 	ctx := c.Request().Context()
 	req := GuessCatNameRequest{}
 	err := c.Bind(&req)
@@ -36,7 +36,7 @@ func (h *GuessCatNameHandler) GuessTheCatName(c echo.Context) error {
 		)
 	}
 
-	err = h.v.StructCtx(ctx, &req)
+	err = gh.v.StructCtx(ctx, &req)
 	if err != nil {
 		// check if it's a validation error or not
 		if errors.As(err, &validator.ValidationErrors{}) {

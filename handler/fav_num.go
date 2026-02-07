@@ -24,7 +24,7 @@ func NewFavoriteNumHandler(validator *validator.Validate) *FavoriteNumHandler {
 	}
 }
 
-func (h *FavoriteNumHandler) Favorite(c echo.Context) error {
+func (fh *FavoriteNumHandler) Favorite(c echo.Context) error {
 	ctx := c.Request().Context()
 	req := FavoriteNumRequest{}
 	err := c.Bind(&req)
@@ -35,7 +35,7 @@ func (h *FavoriteNumHandler) Favorite(c echo.Context) error {
 		)
 	}
 
-	err = h.v.StructCtx(ctx, &req)
+	err = fh.v.StructCtx(ctx, &req)
 	if err != nil {
 		// check if it's a validation error or not
 		if errors.As(err, &validator.ValidationErrors{}) {

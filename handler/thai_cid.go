@@ -24,7 +24,7 @@ func NewThaiCIDHandler(validator *validator.Validate) *ThaiCIDHandler {
 	}
 }
 
-func (h *ThaiCIDHandler) ValidateThaiCID(c echo.Context) error {
+func (th *ThaiCIDHandler) ValidateThaiCID(c echo.Context) error {
 	ctx := c.Request().Context()
 	req := ThaiCIDRequest{}
 	err := c.Bind(&req)
@@ -35,7 +35,7 @@ func (h *ThaiCIDHandler) ValidateThaiCID(c echo.Context) error {
 		)
 	}
 
-	err = h.v.StructCtx(ctx, &req)
+	err = th.v.StructCtx(ctx, &req)
 	if err != nil {
 		// check if it's a validation error or not
 		if errors.As(err, &validator.ValidationErrors{}) {
