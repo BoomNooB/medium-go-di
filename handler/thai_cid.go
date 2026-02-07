@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/go-playground/validator/v10"
+	"github.com/BoomNooB/medium-go-di/validatorwrapper"
 	"github.com/labstack/echo/v4"
 )
 
@@ -15,10 +15,10 @@ type ThaiCIDRequest struct {
 }
 
 type ThaiCIDHandler struct {
-	v *validator.Validate
+	v Valiator
 }
 
-func NewThaiCIDHandler(validator *validator.Validate) *ThaiCIDHandler {
+func NewThaiCIDHandler(validator Valiator) *ThaiCIDHandler {
 	return &ThaiCIDHandler{
 		v: validator,
 	}
@@ -35,10 +35,10 @@ func (th *ThaiCIDHandler) ValidateThaiCID(c echo.Context) error {
 		)
 	}
 
-	err = th.v.StructCtx(ctx, &req)
+	err = th.v.StructValidation(ctx, &req)
 	if err != nil {
 		// check if it's a validation error or not
-		if errors.As(err, &validator.ValidationErrors{}) {
+		if errors.Is(err, validatorwrapper.ErrValidationFailed) {
 			return c.JSON(
 				http.StatusBadRequest,
 				newBadRequestResponse(badRequestNotValid),

@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/go-playground/validator/v10"
+	"github.com/BoomNooB/medium-go-di/validatorwrapper"
 	"github.com/labstack/echo/v4"
 )
 
@@ -16,10 +16,10 @@ type GuessCatNameRequest struct {
 }
 
 type GuessCatNameHandler struct {
-	v *validator.Validate
+	v Valiator
 }
 
-func NewGuessCatNameHandler(validator *validator.Validate) *GuessCatNameHandler {
+func NewGuessCatNameHandler(validator Valiator) *GuessCatNameHandler {
 	return &GuessCatNameHandler{
 		v: validator,
 	}
@@ -36,10 +36,10 @@ func (gh *GuessCatNameHandler) GuessTheCatName(c echo.Context) error {
 		)
 	}
 
-	err = gh.v.StructCtx(ctx, &req)
+	err = gh.v.StructValidation(ctx, &req)
 	if err != nil {
 		// check if it's a validation error or not
-		if errors.As(err, &validator.ValidationErrors{}) {
+		if errors.Is(err, validatorwrapper.ErrValidationFailed) {
 			return c.JSON(
 				http.StatusBadRequest,
 				newBadRequestResponse(badRequestNotValid),

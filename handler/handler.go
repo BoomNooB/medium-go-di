@@ -1,5 +1,11 @@
 package handler
 
+import "context"
+
+type Valiator interface {
+	StructValidation(ctx context.Context, req any) error
+}
+
 type Response struct {
 	IsOK bool   `json:"isOK"`
 	Msg  string `json:"msg,omitempty"`

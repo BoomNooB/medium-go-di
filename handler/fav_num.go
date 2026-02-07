@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/go-playground/validator/v10"
+	"github.com/BoomNooB/medium-go-di/validatorwrapper"
 	"github.com/labstack/echo/v4"
 )
 
@@ -15,10 +15,10 @@ type FavoriteNumRequest struct {
 }
 
 type FavoriteNumHandler struct {
-	v *validator.Validate
+	v Valiator
 }
 
-func NewFavoriteNumHandler(validator *validator.Validate) *FavoriteNumHandler {
+func NewFavoriteNumHandler(validator Valiator) *FavoriteNumHandler {
 	return &FavoriteNumHandler{
 		v: validator,
 	}
@@ -35,10 +35,10 @@ func (fh *FavoriteNumHandler) Favorite(c echo.Context) error {
 		)
 	}
 
-	err = fh.v.StructCtx(ctx, &req)
+	err = fh.v.StructValidation(ctx, &req)
 	if err != nil {
 		// check if it's a validation error or not
-		if errors.As(err, &validator.ValidationErrors{}) {
+		if errors.Is(err, validatorwrapper.ErrValidationFailed) {
 			return c.JSON(
 				http.StatusBadRequest,
 				newBadRequestResponse(badRequestNotValid),

@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/BoomNooB/medium-go-di/handler"
+	"github.com/BoomNooB/medium-go-di/validatorwrapper"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -14,12 +15,13 @@ func main() {
 
 	// Initialize validator once (DI)
 	v := validator.New(validator.WithRequiredStructEnabled())
+	vWrapper := validatorwrapper.NewValidatorWrapper(v)
 
 	// Initialize all handlers with the same validator instance (DI)
-	favHandler := handler.NewFavoriteNumHandler(v)
-	petNameHandler := handler.NewPetNameHandler(v)
-	thaiCIDHandler := handler.NewThaiCIDHandler(v)
-	guessCatHandler := handler.NewGuessCatNameHandler(v)
+	favHandler := handler.NewFavoriteNumHandler(vWrapper)
+	petNameHandler := handler.NewPetNameHandler(vWrapper)
+	thaiCIDHandler := handler.NewThaiCIDHandler(vWrapper)
+	guessCatHandler := handler.NewGuessCatNameHandler(vWrapper)
 
 	// Setup Echo server
 	e := echo.New()

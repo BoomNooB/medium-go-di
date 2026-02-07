@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/go-playground/validator/v10"
+	"github.com/BoomNooB/medium-go-di/validatorwrapper"
 	"github.com/labstack/echo/v4"
 )
 
@@ -15,10 +15,10 @@ type PetNameRequest struct {
 }
 
 type PetNameHandler struct {
-	v *validator.Validate
+	v Valiator
 }
 
-func NewPetNameHandler(validator *validator.Validate) *PetNameHandler {
+func NewPetNameHandler(validator Valiator) *PetNameHandler {
 	return &PetNameHandler{
 		v: validator,
 	}
@@ -35,10 +35,10 @@ func (ph *PetNameHandler) ValidatePetName(c echo.Context) error {
 		)
 	}
 
-	err = ph.v.StructCtx(ctx, &req)
+	err = ph.v.StructValidation(ctx, &req)
 	if err != nil {
 		// check if it's a validation error or not
-		if errors.As(err, &validator.ValidationErrors{}) {
+		if errors.Is(err, validatorwrapper.ErrValidationFailed) {
 			return c.JSON(
 				http.StatusBadRequest,
 				newBadRequestResponse(badRequestNotValid),
