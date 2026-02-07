@@ -1,0 +1,110 @@
+### Test 1: Valid Request - Should return 200 OK
+POST http://localhost:1323/api/v1/favorite
+Content-Type: application/json
+
+{
+  "userId": "a8836583-59ee-4bf8-8fa7-9013af8459ae",
+  "favNum": 42
+}
+
+### Test 2: Valid Request with Different Values
+POST http://localhost:1323/api/v1/favorite
+Content-Type: application/json
+
+{
+  "userId": "f003d47c-e657-485b-a01e-065d18f87295",
+  "favNum": 7
+}
+
+### Test 3: Invalid JSON Syntax - Should return 400 with "json not valid"
+POST http://localhost:1323/api/v1/favorite
+Content-Type: application/json
+
+{
+  "userId": "7f4a4135-183a-4083-ad2a-d0c82126b642",
+  "favNum": 42,
+}
+
+### Test 4: Malformed JSON - Should return 400 with "json not valid"
+POST http://localhost:1323/api/v1/favorite
+Content-Type: application/json
+
+{
+  "userId": "08088728-50c2-417d-a010-5769965a885c"
+  "favNum": 42
+}
+
+### Test 5: Missing userId Field - Should return 400 with "request not valid"
+POST http://localhost:1323/api/v1/favorite
+Content-Type: application/json
+
+{
+  "favNum": 99
+}
+
+### Test 6: Missing favNum Field - Should return 400 with "request not valid"
+POST http://localhost:1323/api/v1/favorite
+Content-Type: application/json
+
+{
+  "userId": "user456"
+}
+
+### Test 7: Empty userId - Should return 400 with "request not valid"
+POST http://localhost:1323/api/v1/favorite
+Content-Type: application/json
+
+{
+  "userId": "",
+  "favNum": 10
+}
+
+### Test 8: Empty Request Body - Should return 400 with "json not valid"
+POST http://localhost:1323/api/v1/favorite
+Content-Type: application/json
+
+{}
+
+### Test 9: Null userId - Should return 400
+POST http://localhost:1323/api/v1/favorite
+Content-Type: application/json
+
+{
+  "userId": null,
+  "favNum": 5
+}
+
+### Test 10: Zero favNum - Should work (0 is valid int)
+POST http://localhost:1323/api/v1/favorite
+Content-Type: application/json
+
+{
+  "userId": "a87666a3-9952-4b51-8a23-5ba543fb87eb",
+  "favNum": 0
+}
+
+### Test 11: Negative favNum - Should work (negative is valid int)
+POST http://localhost:1323/api/v1/favorite
+Content-Type: application/json
+
+{
+  "userId": "a717febd-bc30-47b4-97af-94a48fc67cce",
+  "favNum": -5
+}
+
+### Test 12: Wrong Content Type - Should return 400
+POST http://localhost:1323/api/v1/favorite
+Content-Type: text/plain
+
+userId=test&favNum=123
+
+### Test 13: Extra Fields (should be ignored)
+POST http://localhost:1323/api/v1/favorite
+Content-Type: application/json
+
+{
+  "userId": "af519cc4-56c4-4da9-bb2d-37fd215b17fe",
+  "favNum": 100,
+  "extraField": "should be ignored",
+  "anotherExtra": true
+}
