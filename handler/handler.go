@@ -20,10 +20,13 @@ type Response struct {
 }
 
 type Handler struct {
+	v *validator.Validate
 }
 
-func NewHandler() *Handler {
-	return &Handler{}
+func NewHandler(validator *validator.Validate) *Handler {
+	return &Handler{
+		v: validator,
+	}
 }
 
 const (
@@ -42,10 +45,8 @@ func (h *Handler) Favorite(c echo.Context) error {
 		)
 	}
 
-	v := validator.New(validator.WithRequiredStructEnabled())
-	err = v.StructCtx(ctx, &req)
+	err = h.v.StructCtx(ctx, &req)
 	if err != nil {
-
 		// check if it's a validation error or not
 		if errors.As(err, &validator.ValidationErrors{}) {
 			return c.JSON(
@@ -69,7 +70,6 @@ func (h *Handler) Favorite(c echo.Context) error {
 		http.StatusOK,
 		newOkResponse(),
 	)
-
 }
 
 func newOkResponse() Response {

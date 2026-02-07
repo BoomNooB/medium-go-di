@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 )
@@ -25,7 +26,8 @@ func TestHandler_Favorite_Success(t *testing.T) {
 	c := e.NewContext(httpReq, rec)
 
 	// Test
-	h := NewHandler()
+	v := validator.New(validator.WithRequiredStructEnabled())
+	h := NewHandler(v)
 	err := h.Favorite(c)
 
 	// Assert
@@ -48,7 +50,8 @@ func TestHandler_Favorite_InvalidJSON(t *testing.T) {
 	c := e.NewContext(httpReq, rec)
 
 	// Test
-	h := NewHandler()
+	v := validator.New(validator.WithRequiredStructEnabled())
+	h := NewHandler(v)
 	err := h.Favorite(c)
 
 	// Assert
@@ -74,7 +77,8 @@ func TestHandler_Favorite_MissingUserID(t *testing.T) {
 	c := e.NewContext(httpReq, rec)
 
 	// Test
-	h := NewHandler()
+	v := validator.New(validator.WithRequiredStructEnabled())
+	h := NewHandler(v)
 	err := h.Favorite(c)
 
 	// Assert
@@ -101,7 +105,8 @@ func TestHandler_Favorite_InvalidUUID(t *testing.T) {
 	c := e.NewContext(httpReq, rec)
 
 	// Test
-	h := NewHandler()
+	v := validator.New(validator.WithRequiredStructEnabled())
+	h := NewHandler(v)
 	err := h.Favorite(c)
 
 	// Assert
@@ -127,7 +132,8 @@ func TestHandler_Favorite_MissingFavNum(t *testing.T) {
 	c := e.NewContext(httpReq, rec)
 
 	// Test
-	h := NewHandler()
+	v := validator.New(validator.WithRequiredStructEnabled())
+	h := NewHandler(v)
 	err := h.Favorite(c)
 
 	// Assert
@@ -154,7 +160,8 @@ func TestHandler_Favorite_ZeroFavNum(t *testing.T) {
 	c := e.NewContext(httpReq, rec)
 
 	// Test
-	h := NewHandler()
+	v := validator.New(validator.WithRequiredStructEnabled())
+	h := NewHandler(v)
 	err := h.Favorite(c)
 
 	// Assert
@@ -181,7 +188,8 @@ func TestHandler_Favorite_NegativeFavNum(t *testing.T) {
 	c := e.NewContext(httpReq, rec)
 
 	// Test
-	h := NewHandler()
+	v := validator.New(validator.WithRequiredStructEnabled())
+	h := NewHandler(v)
 	err := h.Favorite(c)
 
 	// Assert
@@ -195,8 +203,10 @@ func TestHandler_Favorite_NegativeFavNum(t *testing.T) {
 }
 
 func TestNewHandler(t *testing.T) {
-	h := NewHandler()
+	v := validator.New(validator.WithRequiredStructEnabled())
+	h := NewHandler(v)
 	assert.NotNil(t, h)
+	assert.NotNil(t, h.v)
 }
 
 func TestNewOkResponse(t *testing.T) {

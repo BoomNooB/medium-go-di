@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/BoomNooB/medium-go-di/handler"
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -12,7 +13,8 @@ func main() {
 	log.Println("Starting application...")
 
 	// Initialize handler and Echo server
-	h := handler.NewHandler()
+	v := validator.New(validator.WithRequiredStructEnabled())
+	h := handler.NewHandler(v)
 	e := echo.New()
 	e.Use(middleware.Recover())
 	e.POST("/api/v1/favorite", h.Favorite)
