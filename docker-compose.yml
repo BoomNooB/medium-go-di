@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    ports:
+      - "1323:1323"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25" # Limit to 25% of 1 CPU core (minimum)
+          memory: 64M # Limit RAM to 64MB
+        reservations:
+          cpus: "0.1"
+          memory: 32M
+    restart: unless-stopped
+    environment:
+      - GOMAXPROCS=1 # Force Go to use only 1 OS thread
